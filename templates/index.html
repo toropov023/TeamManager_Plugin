@@ -1,0 +1,37 @@
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% set teams = craft.teamManager.getAllTeams %}
+{% set title = "Team Manager" %}
+
+{% set tabs = {
+    all: { label: "All Teams"|t},
+    new:    { label: "New Team"|t, url: url('teammanager/teams/new') }
+} %}
+{% set selectedTab = 'all' %}
+
+{% set content %}
+    <p id="noteams"{% if teams|length %} class="hidden"{% endif %}>
+        {{ "No teams exist yet."|t }}
+    </p>
+
+    {% if teams|length %}
+        <table id="teams" class="data">
+            <thead>
+            <th scope="col">{{ "Teams"|t }}</th>
+            <th class="thin"></th>
+            </thead>
+            <tbody>
+
+            {% for team in teams %}
+                <tr data-id="{{ team.id }}" data-name="{{ team.teamName|t }}">
+                    <td><a href="{{ url('../teams/'~team.slug) }}">{{ team.teamName }}</a></td>
+                    <td><a href="{{ url('teammanager/teams/'~team.id) }}" class="edit icon" title="{{ 'Edit'|t }}"></a></td>
+                    <td><a href="{{ actionUrl('teamManager/teams/deleteTeam', { id: team.id }) }}" class="delete icon" title="{{ 'Delete'|t }}"></a></td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    {% endif %}
+{% endset %}
