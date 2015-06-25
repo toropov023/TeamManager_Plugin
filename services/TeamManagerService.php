@@ -62,9 +62,10 @@ class TeamManagerService extends BaseApplicationComponent
 
         if ($teamRecord) {
             $teamModel = TeamManager_TeamModel::populateModel($teamRecord);
+            return $teamModel;
         }
 
-        return $teamModel;
+        return null;
     }
 
     public function getAllTeams()

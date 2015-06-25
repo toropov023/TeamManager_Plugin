@@ -14,6 +14,19 @@ class TeamManager_TeamsController extends BaseController
 
         $teamName = craft()->request->getPost('teamName');
         $slug = rtrim(strtolower(str_replace($illegalSlugCharacters, '_', $teamName)), '_');
+
+        $counter = 1;
+        $slugPrefix = "";
+        while(craft()->teamManager->getTeamBySlug($slug . $slugPrefix)){
+            $slugPrefix = '_' . $counter++;
+            if($counter > 10000)
+                break;
+        }
+        $slug .= $slugPrefix;
+
+        if($counter > 1)
+            craft()->userSession->setError(Craft::t('Team "'.$teamName.'" already exists, so it was renamed to "'. ($teamName .= str_replace('_', ' ', $slugPrefix)) .'"'));
+
         $values = array(
             'teamName' => $teamName,
             'slug' => $slug,
@@ -65,9 +78,9 @@ class TeamManager_TeamsController extends BaseController
             if (craft()->teamManager->saveTeam($model)) {
                 craft()->userSession->setNotice(Craft::t('Team successfully saved.'));
             } else
-                craft()->userSession->setNotice(Craft::t('Team could not be saved.'));
+                craft()->userSession->setError(Craft::t('Team could not be saved.'));
         } else
-            craft()->userSession->setNotice(Craft::t('Team section could not be saved.'));
+            craft()->userSession->setError(Craft::t('Team section could not be saved.'));
 
         $this->redirect('teammanager');
     }
