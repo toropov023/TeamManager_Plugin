@@ -27,7 +27,8 @@
                 <tr data-id="{{ team.id }}" data-name="{{ team.teamName|t }}">
                     <td><a href="{{ url('../teams/'~team.slug) }}">{{ team.teamName }}</a></td>
                     <td><a href="{{ url('teammanager/teams/'~team.id) }}" class="edit icon" title="{{ 'Edit'|t }}"></a></td>
-                    <td><a href="{{ actionUrl('teamManager/teams/deleteTeam', { id: team.id }) }}" class="delete icon" title="{{ 'Delete'|t }}"></a></td>
+                    <!--<td><a href="{{ actionUrl('teamManager/teams/deleteTeam', { id: team.id }) }}" class="delete icon" title="{{ 'Delete'|t }}"></a></td>-->
+                    <td class="thin"><a class="delete icon" title="{{ 'Delete'|t }}" role="button"></a></td>
                 </tr>
             {% endfor %}
 
@@ -35,3 +36,13 @@
         </table>
     {% endif %}
 {% endset %}
+
+{% set js %}
+    var adminTable = new Craft.AdminTable({
+        tableSelector: '#teams',
+        noObjectsSelector: '#noteams',
+        deleteAction: 'teamManager/teams/deleteTeam',
+        confirmDeleteMessage: '{{ "Are you sure you want to delete “{name}” and all its entries?"|t }}'
+    });
+{% endset %}
+{% includeJs js %}

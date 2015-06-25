@@ -68,17 +68,24 @@ class TeamManager_TeamsController extends BaseController
                 craft()->userSession->setNotice(Craft::t('Team could not be saved.'));
         } else
             craft()->userSession->setNotice(Craft::t('Team section could not be saved.'));
+
+        $this->redirect('teammanager');
     }
 
-    public function actionDeleteTeam($id)
+    public function actionDeleteTeam()
     {
+        $this->requirePostRequest();
+        $this->requireAjaxRequest();
+
+        $id = craft()->request->getRequiredPost('id');
+
         $model = craft()->teamManager->getTeam($id);
         if ($model) {
             craft()->sections->deleteSectionById($model->getAttribute('sectionId'));
 
             craft()->teamManager->deleteTeam($id);
             craft()->userSession->setNotice(Craft::t('Team successfully deleted.'));
-            $this->redirect('teammanager');
+            $this->returnJson(array('success' => true));
         }
     }
 }
