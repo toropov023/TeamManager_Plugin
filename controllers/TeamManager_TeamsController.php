@@ -8,7 +8,7 @@ class TeamManager_TeamsController extends BaseController
 
     public function actionSaveTeam()
     {
-        $illegalSlugCharacters = array_merge(range(chr(0),chr(47)), range(chr(58),chr(64)), range(chr(91),chr(96)), range(chr(123),chr(127)), '-');
+        $illegalSlugCharacters = array_merge(range(chr(0),chr(47)), range(chr(58),chr(64)), range(chr(91),chr(96)), range(chr(123),chr(127)));
 
         $this->requirePostRequest();
 
