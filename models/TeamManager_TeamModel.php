@@ -8,6 +8,7 @@ class TeamManager_TeamModel extends BaseModel{
     {
         return array(
             'id' => AttributeType::Number,
+            'sectionId' => AttributeType::Number,
             'teamName'  => AttributeType::String,
             'slug'  => AttributeType::String,
         );

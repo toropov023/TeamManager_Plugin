@@ -14,6 +14,7 @@ class TeamManager_TeamRecord extends BaseRecord
         return array(
             'teamName' => AttributeType::String,
             'slug' => AttributeType::String,
+            'sectionId' => AttributeType::Number,
         );
     }
 }
