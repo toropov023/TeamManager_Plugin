@@ -80,13 +80,31 @@ class TeamManager_TeamsController extends BaseController
         $group->handle = $slug;
 
         if (craft()->sections->saveSection($section)){
-            $model->setAttribute('sectionId', $section->getAttribute('id'));
+            $model->setAttribute('sectionId', $section->id);
 
             if (!craft()->userGroups->saveGroup($group)){
                 craft()->userSession->setError(Craft::t('Team group could not be saved.'));
                 return;
             }
-            $model->setAttribute('groupId', $group->getAttribute('id'));
+            $model->setAttribute('groupId', $group->id);
+
+            $sectionId = $section->id;
+            $permissions = array(
+                'editEntries:'.$sectionId,
+                'createEntries:'.$sectionId,
+                'publishEntries:'.$sectionId,
+                'deleteEntries:'.$sectionId,
+                'editPeerEntries:'.$sectionId,
+                'publishPeerEntries:'.$sectionId,
+                'deletePeerEntries:'.$sectionId,
+                'editPeerEntryDrafts:'.$sectionId,
+                'publishPeerEntryDrafts:'.$sectionId,
+                'deletePeerEntryDrafts:'.$sectionId,
+            );
+            if(!craft()->userPermissions->saveGroupPermissions($group->id, $permissions)) {
+                craft()->userSession->setNotice(Craft::t('Team permissions could not be saved.'));
+                return;
+            }
 
             if (craft()->teamManager->saveTeam($model)) {
                 craft()->userSession->setNotice(Craft::t('Team successfully saved.'));

@@ -2,7 +2,8 @@
 
 namespace Craft;
 
-class TeamManager_TeamModel extends BaseModel{
+class TeamManager_TeamModel extends BaseModel
+{
 
     protected function defineAttributes()
     {
@@ -10,8 +11,8 @@ class TeamManager_TeamModel extends BaseModel{
             'id' => AttributeType::Number,
             'sectionId' => AttributeType::Number,
             'groupId' => AttributeType::Number,
-            'teamName'  => AttributeType::String,
-            'slug'  => AttributeType::String,
+            'teamName' => AttributeType::String,
+            'slug' => AttributeType::String,
         );
     }
 

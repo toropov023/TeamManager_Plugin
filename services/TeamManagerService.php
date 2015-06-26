@@ -32,40 +32,36 @@ class TeamManagerService extends BaseApplicationComponent
 
     public function getTeam($id)
     {
-        $teamModel = new TeamManager_TeamModel();
+        $teamModel = null;
 
         $teamRecord = TeamManager_TeamRecord::model()->findByAttributes(array('id' => $id));
 
-        if ($teamRecord) {
+        if ($teamRecord)
             $teamModel = TeamManager_TeamModel::populateModel($teamRecord);
-        }
 
         return $teamModel;
     }
 
     public function getTeamByName($name){
-        $teamModel = new TeamManager_TeamModel();
+        $teamModel = null;
 
         $teamRecord = TeamManager_TeamRecord::model()->findByAttributes(array('teamName' => $name));
 
-        if ($teamRecord) {
+        if ($teamRecord)
             $teamModel = TeamManager_TeamModel::populateModel($teamRecord);
-        }
 
         return $teamModel;
     }
 
     public function getTeamBySlug($slug){
-        $teamModel = new TeamManager_TeamModel();
+        $teamModel = null;
 
         $teamRecord = TeamManager_TeamRecord::model()->findByAttributes(array('slug' => $slug));
 
-        if ($teamRecord) {
+        if ($teamRecord)
             $teamModel = TeamManager_TeamModel::populateModel($teamRecord);
-            return $teamModel;
-        }
 
-        return null;
+        return $teamModel;
     }
 
     public function getAllTeams()
