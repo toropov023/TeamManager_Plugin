@@ -20,13 +20,4 @@ class TeamManagerVariable
     public function getTeamBySlug($slug){
         return craft()->teamManager->getTeamBySlug($slug);
     }
-
-    /**
-     * @param TeamManager_TeamModel $team
-     */
-    public function testGroup($team){
-        foreach (craft()->userPermissions->getPermissionsByGroupId($team->getAttribute('groupId')) as $value) {
-            echo $value;
-        }
-    }
 }
