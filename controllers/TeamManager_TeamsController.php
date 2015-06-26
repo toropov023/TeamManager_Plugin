@@ -73,8 +73,21 @@ class TeamManager_TeamsController extends BaseController
 
         $section->setLocales($locales);
 
+        //Create a new user group
+        $group = new UserGroupModel();
+        $group->id = craft()->request->getPost('groupId');
+        $group->name = $teamName;
+        $group->handle = $slug;
+
         if (craft()->sections->saveSection($section)){
             $model->setAttribute('sectionId', $section->getAttribute('id'));
+
+            if (!craft()->userGroups->saveGroup($group)){
+                craft()->userSession->setError(Craft::t('Team group could not be saved.'));
+                return;
+            }
+            $model->setAttribute('groupId', $group->getAttribute('id'));
+
             if (craft()->teamManager->saveTeam($model)) {
                 craft()->userSession->setNotice(Craft::t('Team successfully saved.'));
             } else
@@ -95,6 +108,7 @@ class TeamManager_TeamsController extends BaseController
         $model = craft()->teamManager->getTeam($id);
         if ($model) {
             craft()->sections->deleteSectionById($model->getAttribute('sectionId'));
+            craft()->userGroups->deleteGroupById($model->getAttribute('groupId'));
 
             craft()->teamManager->deleteTeam($id);
             craft()->userSession->setNotice(Craft::t('Team successfully deleted.'));

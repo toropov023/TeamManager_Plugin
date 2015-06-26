@@ -13,7 +13,6 @@
 {% else %}
     {% set team = craft.teamManager.getTeam(teamId) %}
     {% set teamId = team.id %}
-    {% set sectionId = team.sectionId %}
     {% set title = "Edit " ~ team.teamName %}
     {% set tabs = {
         all: { label: "All Teams"|t, url: url('teammanager')},
@@ -29,7 +28,8 @@
     <input type="hidden" name="action" value="teamManager/teams/saveTeam" />
     <input type="hidden" name="redirect" value="teammanager" />
     <input type="hidden" name="teamId" value="{{ teamId }}" />
-    <input type="hidden" name="sectionId" value="{{ sectionId }}" />
+    <input type="hidden" name="sectionId" value="{{ team.sectionId }}" />
+    <input type="hidden" name="groupId" value="{{ team.groupId }}" />
 
     {{ forms.textField({
         first: true,
