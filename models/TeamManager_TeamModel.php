@@ -13,6 +13,7 @@ class TeamManager_TeamModel extends BaseModel
             'groupId' => AttributeType::Number,
             'teamName' => AttributeType::String,
             'slug' => AttributeType::String,
+            'gender' => array(AttributeType::Enum, 'values' => array(TeamGenderType::male, TeamGenderType::female)),
         );
     }
 

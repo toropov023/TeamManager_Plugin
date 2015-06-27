@@ -8,33 +8,37 @@ class TeamManager_TeamsController extends BaseController
 
     public function actionSaveTeam()
     {
-        $illegalSlugCharacters = array_merge(range(chr(0),chr(47)), range(chr(58),chr(64)), range(chr(91),chr(96)), range(chr(123),chr(127)));
+        $illegalSlugCharacters = array_merge(range(chr(0), chr(47)), range(chr(58), chr(64)), range(chr(91), chr(96)), range(chr(123), chr(127)));
 
         $this->requirePostRequest();
+
+        $id = craft()->request->getPost('teamId');
 
         $teamName = craft()->request->getPost('teamName');
         $slug = rtrim(strtolower(str_replace($illegalSlugCharacters, '_', $teamName)), '_');
 
-        $counter = 1;
-        $slugPrefix = "";
-        while(craft()->teamManager->getTeamBySlug($slug . $slugPrefix)){
-            $slugPrefix = '_' . $counter++;
-            if($counter > 10000)
-                break;
-        }
-        $slug .= $slugPrefix;
+        if (!$id) {
+            $counter = 1;
+            $slugPrefix = "";
+            while (craft()->teamManager->getTeamBySlug($slug . $slugPrefix)) {
+                $slugPrefix = '_' . $counter++;
+                if ($counter > 10000)
+                    break;
+            }
+            $slug .= $slugPrefix;
 
-        if($counter > 1)
-            craft()->userSession->setError(Craft::t('Team "'.$teamName.'" already exists, so it was renamed to "'. ($teamName .= str_replace('_', ' ', $slugPrefix)) .'"'));
+            if($counter > 1)
+                craft()->userSession->setError(Craft::t('Team "'.$teamName.'" already exists, so it was renamed to "'. ($teamName .= str_replace('_', ' ', $slugPrefix)) .'"'));
+        }
 
         $values = array(
             'teamName' => $teamName,
             'slug' => $slug,
+            'gender' => craft()->request->getPost('gender'),
         );
 
         //TODO check for preconditions
 
-        $id = craft()->request->getPost('teamId');
         if ($id) {
             $model = craft()->teamManager->getTeam($id);
             $model->setAttributes($values);

@@ -16,6 +16,7 @@ class TeamManager_TeamRecord extends BaseRecord
             'slug' => AttributeType::String,
             'sectionId' => AttributeType::Number,
             'groupId' => AttributeType::Number,
+            'gender' => array(AttributeType::Enum, 'values' => array(TeamGenderType::female, TeamGenderType::male), 'default' => TeamGenderType::male),
         );
     }
 }

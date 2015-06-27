@@ -49,6 +49,16 @@
         }) }}
     {% endif %}
 
+    {{ forms.selectField({
+        label: "Gender"|t,
+        instructions: "Select the team's gender"|t,
+        id: 'gender',
+        name: 'gender',
+        options: craft.teamManager.getTeamGenderTypes(),
+        value: team.gender,
+        toggle: true,
+        targetPrefix: 'type-',
+    }) }}
 
     <div class="buttons">
         <input type="submit" class="btn submit" value="{{ 'Save'|t }}">

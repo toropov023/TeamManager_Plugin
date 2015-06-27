@@ -20,4 +20,8 @@ class TeamManagerVariable
     public function getTeamBySlug($slug){
         return craft()->teamManager->getTeamBySlug($slug);
     }
+
+    public function getTeamGenderTypes(){
+        return TeamGenderType::getConstants();
+    }
 }
