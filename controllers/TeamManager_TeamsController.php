@@ -111,6 +111,10 @@ class TeamManager_TeamsController extends BaseController
             }
 
             if (craft()->teamManager->saveTeam($model)) {
+                //Apply the field layout
+                $structure = craft()->sections->getEntryTypesByHandle('structure')[0]; //Must be the only one
+                $model->updateEntryType($structure->fieldLayoutId);
+
                 craft()->userSession->setNotice(Craft::t('Team successfully saved.'));
             } else
                 craft()->userSession->setError(Craft::t('Team could not be saved.'));

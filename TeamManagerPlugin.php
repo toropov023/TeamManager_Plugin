@@ -37,12 +37,19 @@ class TeamManagerPlugin extends BasePlugin
         );
     }
 
-    public function onAfterInstall(){
+    public function onAfterInstall()
+    {
         craft()->db->createCommand()->insert('teammanager_teams', array('teamName' => 'Default'));
     }
 
     public function init()
     {
         parent::init();
+
+        craft()->on('sections.onSaveEntryType', function (Event $event) {
+            if ($event->params['entryType']->handle == 'structure')
+                foreach (craft()->teamManager->getAllTeams() as $team)
+                    $team->updateEntryType($event->params['entryType']->fieldLayoutId);
+        });
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Craft;
 
+use Mockery\CountValidator\Exception;
+
 class TeamManager_TeamModel extends BaseModel
 {
 
@@ -20,5 +22,15 @@ class TeamManager_TeamModel extends BaseModel
     public function __toString()
     {
         return $this->teamName;
+    }
+
+    public function updateEntryType($fieldLayoutId)
+    {
+        $types = craft()->sections->getEntryTypesBySectionId($this->sectionId);
+        foreach ($types as $type) {
+            $record = EntryTypeRecord::model()->findById($type->id);
+            $record->setAttribute('fieldLayoutId', $fieldLayoutId);
+            $record->save(false);
+        }
     }
 }
