@@ -2,7 +2,6 @@
 
 namespace Craft;
 
-use Mockery\CountValidator\Exception;
 
 class TeamManager_TeamModel extends BaseModel
 {

@@ -55,7 +55,8 @@ class TeamManager_TeamsController extends BaseController
         $section->handle           = $slug;
         $section->type             = SectionType::Channel;
         $section->enableVersioning = true;
-        $section->hasUrls          = false;
+        $section->hasUrls          = true;
+        $section->template         = 'teams/_entry';
 
         $locales = array();
 
@@ -64,14 +65,11 @@ class TeamManager_TeamsController extends BaseController
 
         foreach ($localeIds as $localeId)
         {
-            $urlFormat       = 'types.section.urlFormat.'.$localeId;
-            $nestedUrlFormat = 'types.section.nestedUrlFormat.'.$localeId;
-
             $locales[$localeId] = new SectionLocaleModel(array(
                 'locale'           => $localeId,
                 'enabledByDefault' => true,
-                'urlFormat'        => $urlFormat,
-                'nestedUrlFormat'  => $nestedUrlFormat,
+                'urlFormat'        => 'teams/'.$slug.'/{slug}',
+                'nestedUrlFormat'  => null,
             ));
         }
 
