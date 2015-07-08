@@ -105,6 +105,7 @@ class TeamManager_TeamsController extends BaseController
                 'editPeerEntryDrafts:'.$sectionId,
                 'publishPeerEntryDrafts:'.$sectionId,
                 'deletePeerEntryDrafts:'.$sectionId,
+                'accesscp'
             );
             if(!craft()->userPermissions->saveGroupPermissions($group->id, $permissions)) {
                 craft()->userSession->setNotice(Craft::t('Team permissions could not be saved.'));
