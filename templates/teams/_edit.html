@@ -1,5 +1,11 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
+
+{% includeCssResource "lib/redactor/redactor.css" %}
+{% includeJsResource "lib/redactor/redactor.js" %}
+
+{% import "_includes/forms" as forms %}
+
 {% set centered = true %}
 
 {% if teamId is not defined %}
@@ -40,10 +46,19 @@
         value: teamId ? team.teamName : null,
     }) }}
 
+    {{ forms.textareaField({
+        class: 'description-textarea',
+        label: 'Team description'|t,
+        required: true,
+        name: 'description',
+        instructions: "Give a little description to the team"|t,
+        value: team.description,
+    }) }}
+
     {% if teamId %}
         {{ forms.textField({
             label: 'URL slug'|t,
-            instructions: "The team's url slug as in ../teams/{$slug}"|t,
+            instructions: "The team's url slug as in ../teams/{slug}"|t,
             value: team.slug,
             disabled: true,
         }) }}
@@ -60,8 +75,56 @@
         targetPrefix: 'type-',
     }) }}
 
+    <div class="field">
+        <div class="heading">
+            <label>Add a thumbnail</label>
+        </div>
+        <div class="input">
+            {{ forms.elementSelect({
+                elements: craft.teamManager.getElementsById(team.thumbnail),
+                id: 'thumbnail',
+                name: 'thumbnail',
+                elementType: craft.teamManager.getAssetElementType(),
+                criteria: {"kind":[],"localeEnabled":null,"locale":"en_us"},
+                sourceElementId: team.thumbnail,
+                jsClass: 'Craft.AssetSelectInput',
+                addButtonLabel: 'Select Image',
+                limit: 1,
+            }) }}
+        </div>
+    </div>
+
+    <div class="field">
+        <div class="heading">
+            <label>Add team images</label>
+        </div>
+        <div class="input">
+            {{ forms.elementSelect({
+            elements: craft.teamManager.getElementsById(team.images),
+            id: 'images',
+            name: 'images',
+            elementType: craft.teamManager.getAssetElementType(),
+            criteria: {"kind":[],"localeEnabled":null,"locale":"en_us"},
+            sourceElementId: team.images[0],
+            jsClass: 'Craft.AssetSelectInput',
+            addButtonLabel: 'Select Image',
+            limit: 20,
+            }) }}
+        </div>
+    </div>
+
     <div class="buttons">
         <input type="submit" class="btn submit" value="{{ 'Save'|t }}">
     </div>
 </form>
 {% endset %}
+{% set js %}
+    (function() {
+        $('.description-textarea').redactor({
+            buttons: ['html','formatting','bold','italic','unorderedlist','orderedlist','link','video'],
+            plugins: ['pagebreak'],
+            formattingTags: ['p', 'blockquote', 'h2', 'h3', 'h4']
+        });
+    })();
+{% endset %}
+{% includeJs js %}

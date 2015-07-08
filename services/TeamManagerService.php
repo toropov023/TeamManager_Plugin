@@ -16,17 +16,12 @@ class TeamManagerService extends BaseApplicationComponent
     {
         $teamRecord = TeamManager_TeamRecord::model()->findByAttributes(array('id' => $model->getAttribute('id')));
 
-        if ($teamRecord) {
-            foreach ($model->getAttributes() as $key => $value) {
-                $teamRecord->setAttribute($key, $value);
-            }
-        } else {
+        if (!$teamRecord)
             $teamRecord = new TeamManager_TeamRecord();
-            foreach ($model->getAttributes() as $key => $value) {
-                $teamRecord->setAttribute($key, $value);
-            }
-        }
 
+        foreach ($model->getAttributes() as $key => $value)
+            $teamRecord->setAttribute($key, $value);
+        
         return $teamRecord->save();
     }
 

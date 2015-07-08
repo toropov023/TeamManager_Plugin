@@ -24,4 +24,19 @@ class TeamManagerVariable
     public function getTeamGenderTypes(){
         return TeamGenderType::getConstants();
     }
+
+    public function getAssetElementType(){
+        return craft()->elements->getElementType(ElementType::Asset);
+    }
+
+    public function getElementsById($ids){
+        if(is_array($ids)){
+            $arr = array();
+            foreach($ids as $id)
+                $arr[] = craft()->elements->getElementById($id);
+            return $arr;
+        } else{
+            return array(craft()->elements->getElementById($ids));
+        }
+    }
 }

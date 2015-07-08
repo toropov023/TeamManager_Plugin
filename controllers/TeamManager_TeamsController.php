@@ -35,6 +35,9 @@ class TeamManager_TeamsController extends BaseController
             'teamName' => $teamName,
             'slug' => $slug,
             'gender' => craft()->request->getPost('gender'),
+            'thumbnail' => craft()->request->getPost('thumbnail')[0],
+            'description' => craft()->request->getPost('description'),
+            'images' => craft()->request->getPost('images')
         );
 
         //TODO check for preconditions
@@ -56,7 +59,7 @@ class TeamManager_TeamsController extends BaseController
         $section->type             = SectionType::Channel;
         $section->enableVersioning = true;
         $section->hasUrls          = true;
-        $section->template         = 'teams/_entry';
+        $section->template         = 'teams/entries/_entry';
 
         $locales = array();
 
@@ -68,7 +71,7 @@ class TeamManager_TeamsController extends BaseController
             $locales[$localeId] = new SectionLocaleModel(array(
                 'locale'           => $localeId,
                 'enabledByDefault' => true,
-                'urlFormat'        => 'teams/'.$slug.'/{slug}',
+                'urlFormat'        => 'teams/'.$slug.'/entries/{slug}',
                 'nestedUrlFormat'  => null,
             ));
         }
