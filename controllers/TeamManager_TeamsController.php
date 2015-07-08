@@ -35,7 +35,7 @@ class TeamManager_TeamsController extends BaseController
             'teamName' => $teamName,
             'slug' => $slug,
             'gender' => craft()->request->getPost('gender'),
-            'thumbnail' => craft()->request->getPost('thumbnail')[0],
+            'thumbnail' => craft()->request->getPost('thumbnail') == null ? null : craft()->request->getPost('thumbnail')[0],
             'description' => craft()->request->getPost('description'),
             'images' => craft()->request->getPost('images')
         );
@@ -95,6 +95,7 @@ class TeamManager_TeamsController extends BaseController
 
             $sectionId = $section->id;
             $permissions = array(
+                'accessCp',
                 'editEntries:'.$sectionId,
                 'createEntries:'.$sectionId,
                 'publishEntries:'.$sectionId,
@@ -105,7 +106,6 @@ class TeamManager_TeamsController extends BaseController
                 'editPeerEntryDrafts:'.$sectionId,
                 'publishPeerEntryDrafts:'.$sectionId,
                 'deletePeerEntryDrafts:'.$sectionId,
-                'accesscp'
             );
             if(!craft()->userPermissions->saveGroupPermissions($group->id, $permissions)) {
                 craft()->userSession->setNotice(Craft::t('Team permissions could not be saved.'));
