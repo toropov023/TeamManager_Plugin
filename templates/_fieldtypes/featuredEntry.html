@@ -1,0 +1,11 @@
+{% from "_includes/forms" import lightswitch %}
+
+{% set admin = false %}
+{% if craft.session.getRememberedUsername() in craft.users.group('admin') %}
+    {% set admin = true %}
+{% endif %}
+{{ lightswitch({
+    name: name,
+    on: value,
+    disabled: not admin,
+}) }}
