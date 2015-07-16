@@ -39,4 +39,21 @@ class TeamManagerVariable
             return array(craft()->elements->getElementById($ids));
         }
     }
+
+    public function renderFormMacro($macro, array $args)
+    {
+        // Get the current template path
+        $originalPath = craft()->path->getTemplatesPath();
+
+        // Point Twig at the CP templates
+        craft()->path->setTemplatesPath(craft()->path->getCpTemplatesPath());
+
+        // Render the macro.
+        $html = craft()->templates->renderMacro('_includes/forms', $macro, array($args));
+
+        // Restore the original template path
+        craft()->path->setTemplatesPath($originalPath);
+
+        return TemplateHelper::getRaw($html);
+    }
 }

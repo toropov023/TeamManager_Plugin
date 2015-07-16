@@ -31,6 +31,21 @@ class TeamManager_PlayerModel extends BaseModel
         );
     }
 
+    public function validate($attributes = null, $clearErrors = true)
+    {
+        $arr = explode("/", $this->birth);
+
+        if (count($arr) != 3) {
+            $this->addError('birth', Craft::t('Incorrect date format, please use DD/MM/YY date format'));
+        } else {
+            if (strlen($arr[0]) != 2 || $arr[0] < 1 || $arr[0] > 31 || strlen($arr[1]) != 2 || $arr[1] < 1 || $arr[1] > 12 || strlen($arr[2]) != 2 || ($arr[2] < 96 && $arr[2] > 14) || $arr[2] < 0) {
+                $this->addError('birth', Craft::t('Incorrect date format, please use DD/MM/YY date format'));
+            }
+        }
+
+        return parent::validate($attributes, false);
+    }
+
     public function __toString()
     {
         return $this->name;
