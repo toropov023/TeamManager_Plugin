@@ -14,7 +14,18 @@ class TeamManager_PlayerModel extends BaseModel
             'address' => array(AttributeType::String, 'required' => true),
             'telephone' => array(AttributeType::String, 'required' => true),
             'email' => array(AttributeType::Email, 'required' => true),
-            'data' => AttributeType::Mixed
+            'data' => AttributeType::Mixed,
+            //extra data
+            'previousClub' => AttributeType::String,
+            'previousLeague' => AttributeType::String,
+            'medicalIssues' => AttributeType::String,
+            'parentName1' => array(AttributeType::String, 'required' => true),
+            'parentName2' => AttributeType::String,
+            'parentsAddress' => array(AttributeType::String, 'required' => true),
+            'parentTelephone1' => array(AttributeType::String, 'required' => true),
+            'parentTelephone2' => AttributeType::String,
+            'parentEmail1' => array(AttributeType::Email, 'required' => true),
+            'parentEmail2' => AttributeType::Email
         );
     }
 

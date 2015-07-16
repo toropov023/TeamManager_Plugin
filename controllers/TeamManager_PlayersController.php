@@ -17,12 +17,33 @@ class TeamManager_PlayersController extends BaseController
         $model->address = craft()->request->getPost('address');
         $model->telephone = craft()->request->getPost('telephone');
         $model->email = craft()->request->getPost('email');
-        $model->data = craft()->request->getPost('data');
+
+        //Obtaining extra data
+        $dataNodes = array(
+            'previousClub',
+            'previousLeague',
+            'medicalIssues',
+            'parentName1',
+            'parentName2',
+            'parentsAddress',
+            'parentTelephone1',
+            'parentTelephone2',
+            'parentEmail1',
+            'parentEmail2'
+        );
+
+        $data = array();
+        foreach ($dataNodes as $node) {
+            $model->$node = craft()->request->getPost($node);
+            $data[$node] = craft()->request->getPost($node);
+        }
+
+        $model->data = $data;
 
         if ($model->validate() && craft()->teamManager->savePlayer($model)) {
-            craft()->urlManager->setRouteVariables(array(
-                'success' => true
-            ));
+                craft()->urlManager->setRouteVariables(array(
+                    'success' => true
+                ));
 //            craft()->userSession->setNotice(' Thank you for registering! Your registration form has successfully been saved');
         } else {
 //            craft()->userSession->setError('Error, please check all the required fields and try again!');
