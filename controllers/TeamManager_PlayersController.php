@@ -29,7 +29,9 @@ class TeamManager_PlayersController extends BaseController
             'parentTelephone1',
             'parentTelephone2',
             'parentEmail1',
-            'parentEmail2'
+            'parentEmail2',
+            'shortsSize',
+            'shirtSize'
         );
 
         $data = array();

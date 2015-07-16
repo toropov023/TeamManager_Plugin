@@ -25,7 +25,9 @@ class TeamManager_PlayerModel extends BaseModel
             'parentTelephone1' => array(AttributeType::String, 'required' => true),
             'parentTelephone2' => AttributeType::String,
             'parentEmail1' => array(AttributeType::Email, 'required' => true),
-            'parentEmail2' => AttributeType::Email
+            'parentEmail2' => AttributeType::Email,
+            'shirtSize' => array(AttributeType::String, 'required' => true),
+            'shortsSize' => array(AttributeType::String, 'required' => true)
         );
     }
 
