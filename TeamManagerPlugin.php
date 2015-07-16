@@ -40,6 +40,7 @@ class TeamManagerPlugin extends BasePlugin
     public function onAfterInstall()
     {
         craft()->db->createCommand()->insert('teammanager_teams', array('teamName' => 'Default'));
+        craft()->db->createCommand()->insert('teammanager_players', array('name' => 'Default'));
     }
 
     public function init()

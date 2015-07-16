@@ -13,7 +13,7 @@ class TeamManager_PlayerRecord extends BaseRecord
     {
         return array(
             'name' => AttributeType::String,
-            'birth' => AttributeType::DateTime,
+            'birth' => AttributeType::String,
             'address' => AttributeType::String,
             'telephone' => AttributeType::String,
             'email' => AttributeType::Email,
