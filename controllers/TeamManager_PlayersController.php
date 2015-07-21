@@ -5,6 +5,7 @@ namespace Craft;
 class TeamManager_PlayersController extends BaseController
 {
 
+    protected $allowAnonymous = true;
 
     public function actionSavePlayer()
     {
