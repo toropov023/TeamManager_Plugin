@@ -1,0 +1,21 @@
+{{ craft.teamManager.renderFormCustomMacro('editableTable', {
+    name: 'table',
+    instructions: "Setup your own Slide Show layout"|t,
+    cols: [
+        {heading: "Title"},
+        {heading: "Picture"},
+        {heading: "Link"},
+        {heading: "Default", type: "checkbox"}
+    ],
+    rows: [
+        [
+            "Column 1",
+            "Column 2",
+            "Column 3",
+        ],
+        2,
+        3,
+        4,
+        5
+    ]
+}) }}

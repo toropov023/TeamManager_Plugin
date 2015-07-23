@@ -56,4 +56,17 @@ class TeamManagerVariable
 
         return TemplateHelper::getRaw($html);
     }
+
+    public function renderFormCustomMacro($macro, array $args)
+    {
+        $oldPath = craft()->path->getTemplatesPath();
+        $newPath = craft()->path->getPluginsPath().'teammanager/templates';
+        craft()->path->setTemplatesPath($newPath);
+
+        $html = craft()->templates->renderMacro('_includes/forms', $macro, array($args));
+
+        craft()->path->setTemplatesPath($oldPath);
+
+        return TemplateHelper::getRaw($html);
+    }
 }
