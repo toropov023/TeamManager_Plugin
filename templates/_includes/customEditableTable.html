@@ -16,12 +16,24 @@
 		{% for rowId, row in rows %}
 			<tr data-id="{{ rowId }}">
 				{% for colId, col in cols %}
-					{% set cellName = name~'['~rowId~']['~colId~']' %}
+					{% set cellName = rowId~'-'~colId %}
 					{% set value = (row[colId] is defined ? row[colId] : null) %}
 					{% set textual = (col.type in ['singleline','multiline','number']) %}
 					<td class="{% if textual %}textual{% endif %} {% if col.class is defined %}{{ col.class }}{% endif %}"{% if col.width is defined %} width="{{ col.width }}"{% endif %}>
                         {%- if col.type == 'button' -%}
-                            <a class="edit icon fl" id="{{ name~'['~rowId~']['~colId~']' }}"><p class="fl-title">{{ value }}</p></a>
+                            <div class="fl-title-edit" id="fl-title-edit-{{ cellName }}" style="display: none">
+                                <div class="fl-title-edit-inner">
+                                    {{ craft.teamManager.renderFormMacro(col.editType, {
+                                        label:        col.heading|t,
+                                        id:           col.name,
+                                        name:         col.name,
+                                        value:        value
+                                    }) }}
+                                </div>
+                            </div>
+                            <a class="edit icon fl" id="{{ cellName }}">
+                                <p class="fl-title">{{ value }}</p>
+                            </a>
 						{%- elseif col.type == 'checkbox' -%}
 							<input type="hidden" name="{{ cellName }}">
 							<input class="fl-checkbox" type="checkbox" name="{{ cellName }}" value="1"{% if value %} checked{% endif %}>
@@ -29,7 +41,7 @@
                                 {% for colId, col in cols %}
                                     {%- if col.type == 'button' -%}
                                         <script>
-                                            var id = "#table\\[" + {{ rowId }} + "\\]\\[" + {{ colId }} + "\\]";
+                                            var id = "#" + {{ rowId }} + "-" + {{ colId }};
                                             $(id).addClass('disabled');
                                         </script>
                                     {%- endif -%}
@@ -45,20 +57,39 @@
 	</tbody>
 
     <script>
-        $(document).ready( function() {
-            $('.fl').hover( function() {
-                if(!$('.fl').hasClass('disabled'))
+        $(document).ready(function () {
+            //Live preview of the cell value
+            $('.fl').hover(function () {
+                if (!$(this).hasClass('disabled'))
                     $(this).find('.fl-title').show();
-            }, function() {
+            }, function () {
                 $(this).find('.fl-title').hide();
             });
 
+            //Opening the edit popup
+            $('.fl').click(function () {
+                if (!$(this).hasClass('disabled')) {
+                    var id = $(this).attr('id');
+                    $("#fl-title-edit-" + id).show();
+                    $(this).addClass(id);
+                }
+            });
+
+            //Closing the edit popup
+            $('.fl-title-edit-inner').on('click', function (e) {
+                e.stopPropagation();
+            });
+            $('.fl-title-edit').on('click', function () {
+               $(this).hide();
+            });
+
+            //Toggling row on and off
             $('.fl-checkbox').click(function () {
                 var str = $(this).attr('name');
-                var row = str.substring(str.indexOf('[') + 1, str.indexOf(']'));
-                for(var i = 0; i < 3; i++) {
-                    var id = "#table\\[" + row + "\\]\\[" + i + "\\]";
-                    if($(this).is(':checked'))
+                var row = str.substring(0, str.indexOf('-'));
+                for (var i = 0; i < 3; i++) {
+                    var id = "#" + row + "-" + i;
+                    if ($(this).is(':checked'))
                         $(id).addClass('disabled');
                     else
                         $(id).removeClass('disabled');
