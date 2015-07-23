@@ -2,15 +2,14 @@
 {%- set cols = (cols is defined ? cols : []) %}
 {%- set rows = (rows is defined ? rows : []) -%}
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
 <table id="{{ id }}" class="shadow-box editable">
 	<thead>
 		<tr>
 			{% for col in cols %}
 				<th scope="col" class="header">{{ col.heading ? col.heading : ' ' }}</th>
 			{% endfor %}
-			{% if not static %}
-				<th class="header" colspan="2"></th>
-			{% endif %}
 		</tr>
 	</thead>
 	<tbody>
@@ -21,41 +20,50 @@
 					{% set value = (row[colId] is defined ? row[colId] : null) %}
 					{% set textual = (col.type in ['singleline','multiline','number']) %}
 					<td class="{% if textual %}textual{% endif %} {% if col.class is defined %}{{ col.class }}{% endif %}"{% if col.width is defined %} width="{{ col.width }}"{% endif %}>
-						{%- if col.type == 'select' -%}
-							{% include "_includes/forms/select" with {
-								class:    'small',
-								name:     cellName,
-								options:  col.options,
-								value:    value,
-								disabled: static
-							} only %}
+                        {%- if col.type == 'button' -%}
+                            <a class="edit icon fl" id="{{ name~'['~rowId~']['~colId~']' }}"><p class="fl-title">{{ value }}</p></a>
 						{%- elseif col.type == 'checkbox' -%}
 							<input type="hidden" name="{{ cellName }}">
-							<input type="checkbox" name="{{ cellName }}" value="1"{% if value %} checked{% endif %}{% if static %} disabled{% endif %}>
-						{%- else -%}
+							<input class="fl-checkbox" type="checkbox" name="{{ cellName }}" value="1"{% if value %} checked{% endif %}>
+                            {% if value %}
+                                {% for colId, col in cols %}
+                                    {%- if col.type == 'button' -%}
+                                        <script>
+                                            var id = "#table\\[" + {{ rowId }} + "\\]\\[" + {{ colId }} + "\\]";
+                                            $(id).addClass('disabled');
+                                        </script>
+                                    {%- endif -%}
+                                {% endfor %}
+                            {% endif %}
+                        {%- else -%}
 							<textarea name="{{ cellName }}" rows="1"{% if static %} disabled{% endif %}>{{ value }}</textarea>
 						{%- endif -%}
 					</td>
 				{% endfor %}
-				{% if not static %}
-					<td class="thin action"><a class="move icon" title="{{ 'Reorder'|t }}"></a></td>
-					<td class="thin action"><a class="delete icon" title="{{ 'Delete'|t }}"></a></td>
-				{% endif %}
 			</tr>
 		{% endfor %}
 	</tbody>
+
+    <script>
+        $(document).ready( function() {
+            $('.fl').hover( function() {
+                if(!$('.fl').hasClass('disabled'))
+                    $(this).find('.fl-title').show();
+            }, function() {
+                $(this).find('.fl-title').hide();
+            });
+
+            $('.fl-checkbox').click(function () {
+                var str = $(this).attr('name');
+                var row = str.substring(str.indexOf('[') + 1, str.indexOf(']'));
+                for(var i = 0; i < 3; i++) {
+                    var id = "#table\\[" + row + "\\]\\[" + i + "\\]";
+                    if($(this).is(':checked'))
+                        $(id).addClass('disabled');
+                    else
+                        $(id).removeClass('disabled');
+                }
+            });
+        });
+    </script>
 </table>
-{% if not static %}
-	<div class="btn add icon">{{ addRowLabel is defined ? addRowLabel : "Add a row"|t }}</div>
-{% endif %}
-
-{% if not static and (initJs is not defined or initJs) %}
-	{% set js %}
-		new Craft.EditableTable(
-			"{{ id   | namespaceInputId   | e('js') }}",
-			"{{ name | namespaceInputName | e('js') }}",
-			{{ cols|json_encode|raw }});
-	{% endset %}
-
-	{% includeJs js %}
-{% endif %}

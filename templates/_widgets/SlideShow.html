@@ -1,10 +1,13 @@
+{% includeCssResource "teammanager/css/featured-layout.css" %}
+
 {{ craft.teamManager.renderFormCustomMacro('editableTable', {
     name: 'table',
     instructions: "Setup your own Slide Show layout"|t,
+    static: true,
     cols: [
-        {heading: "Title"},
-        {heading: "Picture"},
-        {heading: "Link"},
+        {heading: "Title", type: "button"},
+        {heading: "Picture", type: "button"},
+        {heading: "Link", type: "button"},
         {heading: "Default", type: "checkbox"}
     ],
     rows: [
@@ -12,6 +15,7 @@
             "Column 1",
             "Column 2",
             "Column 3",
+            true
         ],
         2,
         3,

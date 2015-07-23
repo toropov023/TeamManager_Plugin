@@ -1,0 +1,9 @@
+.fl-title{
+    display: none;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.67);
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 17px;
+}
