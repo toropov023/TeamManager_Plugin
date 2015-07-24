@@ -69,4 +69,32 @@ class TeamManagerVariable
 
         return TemplateHelper::getRaw($html);
     }
+
+    public function getFeaturedLayouts(){
+        $arr = array();
+        foreach (craft()->teamManager->getFeaturedLayouts() as $val) {
+            $inner = array();
+            foreach ($val->getAttributes() as $name => $value)
+                $inner[$name] = $value;
+            $arr[] = $inner;
+        }
+
+        return $arr;
+    }
+
+    public function getFeaturedLayoutsByType($typeName)
+    {
+        $type = $typeName == 'slideShow' ? FeaturedLayoutType::slideShow : FeaturedLayoutType::grid;
+
+        $arr = array();
+        foreach (craft()->teamManager->getFeaturedLayoutsByType($type) as $val) {
+            $inner = array();
+            foreach ($val->getAttributes() as $name => $value)
+                $inner[$name] = $value;
+            $arr[$val->index] = $inner;
+        }
+
+        echo print_r($arr);
+        return $arr;
+    }
 }
