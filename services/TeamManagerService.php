@@ -21,7 +21,7 @@ class TeamManagerService extends BaseApplicationComponent
 
         foreach ($model->getAttributes() as $key => $value)
             $teamRecord->setAttribute($key, $value);
-        
+
         return $teamRecord->save();
     }
 
@@ -37,7 +37,8 @@ class TeamManagerService extends BaseApplicationComponent
         return $teamModel;
     }
 
-    public function getTeamByName($name){
+    public function getTeamByName($name)
+    {
         $teamModel = null;
 
         $teamRecord = TeamManager_TeamRecord::model()->findByAttributes(array('teamName' => $name));
@@ -48,7 +49,8 @@ class TeamManagerService extends BaseApplicationComponent
         return $teamModel;
     }
 
-    public function getTeamBySlug($slug){
+    public function getTeamBySlug($slug)
+    {
         $teamModel = null;
 
         $teamRecord = TeamManager_TeamRecord::model()->findByAttributes(array('slug' => $slug));
@@ -103,7 +105,8 @@ class TeamManagerService extends BaseApplicationComponent
         return $teamModel;
     }
 
-    public function getPlayerByName($name){
+    public function getPlayerByName($name)
+    {
         $teamModel = null;
 
         $teamRecord = TeamManager_PlayerRecord::model()->findByAttributes(array('name' => $name));
@@ -122,12 +125,48 @@ class TeamManagerService extends BaseApplicationComponent
 
     public function deletePlayer($id)
     {
-        $teamRecord = TeamManager_PlayerRecord::model()->findByAttributes(array('id' => $id));
+        $record = TeamManager_PlayerRecord::model()->findByAttributes(array('id' => $id));
 
-        if ($teamRecord) {
-            $teamRecord->delete();
+        if ($record) {
+            $record->delete();
             return true;
         } else
             return false;
+    }
+
+    //Featured layouts
+    public function saveFeaturedLayout(TeamManager_FeaturedLayoutModel &$model)
+    {
+        $record = TeamManager_FeaturedLayoutRecord::model()->findByAttributes(array('id' => $model->getAttribute('id')));
+
+        if (!$record)
+            $record = new TeamManager_FeaturedLayoutRecord();
+
+        foreach ($model->getAttributes() as $key => $value)
+            $record->setAttribute($key, $value);
+
+        return $record->save();
+    }
+
+    public function deleteFeaturedLayout($id)
+    {
+        $record = TeamManager_FeaturedLayoutRecord::model()->findByAttributes(array('id' => $id));
+
+        if ($record) {
+            $record->delete();
+            return true;
+        } else
+            return false;
+    }
+
+    public function getFeaturedLayouts()
+    {
+        $records = TeamManager_FeaturedLayoutRecord::model()->findAll(array('order' => 't.id'));
+        return TeamManager_FeaturedLayoutModel::populateModels($records, 'id');
+    }
+    public function getFeaturedLayoutsByType($type)
+    {
+        $records = TeamManager_FeaturedLayoutRecord::model()->findAllByAttributes(array('type' => $type));
+        return TeamManager_FeaturedLayoutModel::populateModels($records, 'index');
     }
 }
