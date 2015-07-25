@@ -47,9 +47,7 @@ class TeamManager_PlayersController extends BaseController
                 craft()->urlManager->setRouteVariables(array(
                     'success' => true
                 ));
-//            craft()->userSession->setNotice(' Thank you for registering! Your registration form has successfully been saved');
         } else {
-//            craft()->userSession->setError('Error, please check all the required fields and try again!');
             craft()->urlManager->setRouteVariables(array(
                 'player' => $model
             ));
