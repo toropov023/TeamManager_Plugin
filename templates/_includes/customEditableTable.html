@@ -60,7 +60,7 @@
         $(document).ready(function () {
             //Live preview of the cell value
             $('.fl').hover(function () {
-                if (!$(this).hasClass('disabled'))
+                if (!$(this).hasClass('disabled') && $(this).find('p').text().length > 0)
                     $(this).find('.fl-title').show();
             }, function () {
                 $(this).find('.fl-title').hide();
@@ -71,7 +71,6 @@
                 if (!$(this).hasClass('disabled')) {
                     var id = $(this).attr('id');
                     $("#fl-title-edit-" + id).show();
-                    $(this).addClass(id);
                 }
             });
 
@@ -81,6 +80,10 @@
             });
             $('.fl-title-edit').on('click', function () {
                $(this).hide();
+
+                //update the live view
+                var id = $(this).attr('id').replace('fl-title-edit-', '');
+                $("#" + id).find("p").text($(this).find('input').val());
             });
 
             //Toggling row on and off

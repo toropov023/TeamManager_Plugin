@@ -1,6 +1,5 @@
 {% includeCssResource "teammanager/css/featured-layout.css" %}
 {% set values = craft.teamManager.getFeaturedLayoutsByType('slideShow') %}
-{% set values = (values is defined ? values : []) %}
 
 <form method="post" action="" accept-charset="UTF-8">
     <input type="hidden" name="action" value="teamManager/featuredLayout/saveLayouts" />
