@@ -12,6 +12,7 @@
         name: 'table',
         static: true,
         cols: [
+            {heading: "#", name: "indexCol"},
             {heading: "Title", type: "button", name: "title", editType: "textField"},
             {heading: "Image", type: "button", name: "image", editType: "elementSelectField", noLiveUpdate: true},
             {heading: "Link", type: "button", name: "link", editType: "textField"},
@@ -19,30 +20,35 @@
         ],
         rows: [
             [
+                1,
                 values[0]['title'],
                 values[0]['image'],
                 values[0]['link'],
                 not (0 in values|keys)
             ],
             [
+                2,
                 values[1]['title'],
                 values[1]['image'],
                 values[1]['link'],
                 not (1 in values|keys)
             ],
             [
+                3,
                 values[2]['title'],
                 values[2]['image'],
                 values[2]['link'],
                 not (2 in values|keys)
             ],
             [
+                4,
                 values[3]['title'],
                 values[3]['image'],
                 values[3]['link'],
                 not (3 in values|keys)
             ],
             [
+                5,
                 values[4]['title'],
                 values[4]['image'],
                 values[4]['link'],

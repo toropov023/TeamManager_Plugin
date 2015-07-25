@@ -72,7 +72,7 @@
                                 {% endfor %}
                             {% endif %}
                         {%- else -%}
-							<textarea name="{{ cellName }}" rows="1"{% if static %} disabled{% endif %}>{{ value }}</textarea>
+							<textarea style="padding: 7px 0; width: 10px" name="{{ cellName }}" rows="1"{% if static %} disabled{% endif %}>{{ value }}</textarea>
 						{%- endif -%}
 					</td>
 				{% endfor %}
@@ -115,7 +115,7 @@
             $('.fl-checkbox').click(function () {
                 var str = $(this).attr('name').replace('fl-checkbox-', '');
                 var row = str.substring(0, str.indexOf('-'));
-                for (var i = 0; i < 3; i++) {
+                for (var i = 0; i < {{ cols|length }}; i++) {
                     var id = "#" + row + "-" + i;
                     if ($(this).is(':checked'))
                         $(id).addClass('disabled');
