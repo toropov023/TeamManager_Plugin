@@ -23,7 +23,7 @@ class TeamManager_FeaturedLayoutController extends BaseController
                 $model->index = craft()->request->getPost($i . '-index');
                 $model->title = craft()->request->getPost($i . '-title');
                 $model->link = craft()->request->getPost($i . '-link');
-                $model->image = craft()->request->getPost($i . '-image');
+                $model->image = craft()->request->getPost($i . '-image') == null ? null : craft()->request->getPost($i . '-image')[0];
                 $model->type = $type;
 
                 if ($model->validate())

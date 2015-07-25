@@ -26,16 +26,37 @@
                         {%- if col.type == 'button' -%}
                             <div class="fl-title-edit" id="fl-title-edit-{{ cellName }}" style="display: none">
                                 <div class="fl-title-edit-inner">
-                                    {{ craft.teamManager.renderFormMacro(col.editType, {
-                                        label:        col.heading|t,
-                                        id:           rowId~'-'~col.name,
-                                        name:         rowId~'-'~col.name,
-                                        value:        value
-                                    }) }}
+                                    {% if col.editType == 'elementSelectField' %}
+                                        <div class="field">
+                                            <div class="heading">
+                                                <label>Add a thumbnail</label>
+                                            </div>
+                                            <div class="input">
+                                                {{ craft.teamManager.renderFormMacro('elementSelect', {
+                                                    elements: craft.teamManager.getElementsById(value),
+                                                    id: rowId~'-'~col.name,
+                                                    name: rowId~'-'~col.name,
+                                                    elementType: craft.teamManager.getAssetElementType(),
+                                                    criteria: {"kind":[],"localeEnabled":null,"locale":"en_us"},
+                                                    sourceElementId: value,
+                                                    jsClass: 'Craft.AssetSelectInput',
+                                                    addButtonLabel: 'Select Image',
+                                                    limit: 1
+                                                }) }}
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        {{ craft.teamManager.renderFormMacro(col.editType, {
+                                            label:        col.heading|t,
+                                            id:           rowId~'-'~col.name,
+                                            name:         rowId~'-'~col.name,
+                                            value:        value
+                                        }) }}
+                                    {% endif %}
                                 </div>
                             </div>
-                            <a class="edit icon fl" id="{{ cellName }}">
-                                <p class="fl-title">{{ value }}</p>
+                            <a class="edit icon fl {{ col.noLiveUpdate ? 'noLiveUpdate'}}" id="{{ cellName }}">
+                                <p class="fl-title">{{ value|length > 0 ? value~' - ' }}<i style="color: #8DD4FF">Click to Edit</i></p>
                             </a>
 						{%- elseif col.type == 'checkbox' -%}
 							<input type="hidden" name="{{ cellName }}">
@@ -64,7 +85,7 @@
             //Live preview of the cell value
             var fl = $('.fl');
             fl.hover(function () {
-                if (!$(this).hasClass('disabled') && $(this).find('p').text().length > 0)
+                if (!$(this).hasClass('disabled') && $(this).find('p').text().length > 0 && !$(this).hasClass('noLiveUpdate'))
                     $(this).find('.fl-title').show();
             }, function () {
                 $(this).find('.fl-title').hide();
