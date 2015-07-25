@@ -4,6 +4,8 @@
 <form method="post" action="" accept-charset="UTF-8">
     <input type="hidden" name="action" value="teamManager/featuredLayout/saveLayouts" />
     <input type="hidden" name="values" value="{{ values }}" />
+    <input type="hidden" name="count" value="5">
+    <input type="hidden" name="fLType" value="slideShow">
 
     {{ craft.teamManager.renderFormCustomMacro('editableTable', {
         values: values,

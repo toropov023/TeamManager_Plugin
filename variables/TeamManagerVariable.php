@@ -94,7 +94,6 @@ class TeamManagerVariable
             $arr[$val->index] = $inner;
         }
 
-        echo print_r($arr);
         return $arr;
     }
 }

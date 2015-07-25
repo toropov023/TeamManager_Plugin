@@ -1,6 +1,7 @@
 {%- set static = (static is defined ? static : false) %}
 {%- set cols = (cols is defined ? cols : []) %}
 {%- set rows = (rows is defined ? rows : []) -%}
+{%- set values = (values is defined ? values : []) -%}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
@@ -15,6 +16,8 @@
 	<tbody>
 		{% for rowId, row in rows %}
 			<tr data-id="{{ rowId }}">
+                <input type="hidden" name="{{ rowId~'-id'}}" value="{{ values[rowId]['id'] }}">
+                <input type="hidden" name="{{ rowId~'-index'}}" value="{{ rowId }}">
 				{% for colId, col in cols %}
 					{% set cellName = rowId~'-'~colId %}
 					{% set value = (row[colId] is defined ? row[colId] : null) %}
@@ -25,8 +28,8 @@
                                 <div class="fl-title-edit-inner">
                                     {{ craft.teamManager.renderFormMacro(col.editType, {
                                         label:        col.heading|t,
-                                        id:           col.name,
-                                        name:         col.name,
+                                        id:           rowId~'-'~col.name,
+                                        name:         rowId~'-'~col.name,
                                         value:        value
                                     }) }}
                                 </div>
@@ -36,7 +39,7 @@
                             </a>
 						{%- elseif col.type == 'checkbox' -%}
 							<input type="hidden" name="{{ cellName }}">
-							<input class="fl-checkbox" type="checkbox" name="{{ cellName }}" value="1"{% if value %} checked{% endif %}>
+							<input class="fl-checkbox" type="checkbox" name="{{ rowId~'-'~col.name }}" id="fl-checkbox-{{ cellName }}" value="1"{% if value %} checked{% endif %}>
                             {% if value %}
                                 {% for colId, col in cols %}
                                     {%- if col.type == 'button' -%}
@@ -59,7 +62,8 @@
     <script>
         $(document).ready(function () {
             //Live preview of the cell value
-            $('.fl').hover(function () {
+            var fl = $('.fl');
+            fl.hover(function () {
                 if (!$(this).hasClass('disabled') && $(this).find('p').text().length > 0)
                     $(this).find('.fl-title').show();
             }, function () {
@@ -67,7 +71,7 @@
             });
 
             //Opening the edit popup
-            $('.fl').click(function () {
+            fl.click(function () {
                 if (!$(this).hasClass('disabled')) {
                     var id = $(this).attr('id');
                     $("#fl-title-edit-" + id).show();
@@ -88,7 +92,7 @@
 
             //Toggling row on and off
             $('.fl-checkbox').click(function () {
-                var str = $(this).attr('name');
+                var str = $(this).attr('name').replace('fl-checkbox-', '');
                 var row = str.substring(0, str.indexOf('-'));
                 for (var i = 0; i < 3; i++) {
                     var id = "#" + row + "-" + i;
