@@ -1,6 +1,7 @@
 {% includeCssResource "teammanager/css/featured-layout.css" %}
 {% set values = craft.teamManager.getFeaturedLayoutsByType('slideShow') %}
 
+<h3 style="color: #DA5A47;">USE WITH CAUTION!</h3>
 <form method="post" action="" accept-charset="UTF-8">
     <input type="hidden" name="action" value="teamManager/featuredLayout/saveLayouts" />
     <input type="hidden" name="values" value="{{ values }}" />
@@ -57,7 +58,7 @@
         ]
     }) }}
 
-    <div class="buttons">
-        <input type="submit" class="btn submit" value="{{ 'Save'|t }}">
+    <div class="buttons" style="text-align: center">
+        <input type="submit" class="btn submit" value="{{ 'Save'|t }}" style="float: none">
     </div>
 </form>
