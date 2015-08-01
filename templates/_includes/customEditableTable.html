@@ -1,6 +1,5 @@
 {%- set static = (static is defined ? static : false) %}
 {%- set cols = (cols is defined ? cols : []) %}
-{%- set rows = (rows is defined ? rows : []) -%}
 {%- set values = (values is defined ? values : []) -%}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -14,13 +13,13 @@
 		</tr>
 	</thead>
 	<tbody>
-		{% for rowId, row in rows %}
+		{% for rowId in 0..count %}
 			<tr data-id="{{ rowId }}">
                 <input type="hidden" name="{{ rowId~'-id'}}" value="{{ values[rowId]['id'] }}">
                 <input type="hidden" name="{{ rowId~'-index'}}" value="{{ rowId }}">
 				{% for colId, col in cols %}
 					{% set cellName = rowId~'-'~colId %}
-					{% set value = (row[colId] is defined ? row[colId] : null) %}
+					{% set value = (values[rowId][col.name] is defined ? values[rowId][col.name] : null) %}
 					{% set textual = (col.type in ['singleline','multiline','number']) %}
 					<td class="{% if textual %}textual{% endif %} {% if col.class is defined %}{{ col.class }}{% endif %}"{% if col.width is defined %} width="{{ col.width }}"{% endif %}>
                         {%- if col.type == 'button' -%}
@@ -59,6 +58,7 @@
                                 <p class="fl-title">{{ value|length > 0 ? value~' - ' }}<i style="color: #8DD4FF">Click to Edit</i></p>
                             </a>
 						{%- elseif col.type == 'checkbox' -%}
+                            {% set value = not (rowId in values|keys) %}
 							<input type="hidden" name="{{ cellName }}">
 							<input class="fl-checkbox" type="checkbox" name="{{ rowId~'-'~col.name }}" id="fl-checkbox-{{ cellName }}" value="1"{% if value %} checked{% endif %}>
                             {% if value %}
@@ -71,6 +71,8 @@
                                     {%- endif -%}
                                 {% endfor %}
                             {% endif %}
+                        {%- elseif col.type == 'index' -%}
+							<textarea style="padding: 7px 0; width: 10px" name="{{ cellName }}" rows="1"{% if static %} disabled{% endif %}>{{ rowId + 1 }}</textarea>
                         {%- else -%}
 							<textarea style="padding: 7px 0; width: 10px" name="{{ cellName }}" rows="1"{% if static %} disabled{% endif %}>{{ value }}</textarea>
 						{%- endif -%}
