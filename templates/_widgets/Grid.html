@@ -1,15 +1,15 @@
 {% includeCssResource "teammanager/css/featured-layout.css" %}
-{% set values = craft.teamManager.getFeaturedLayoutsByType('slideShow') %}
+{% set values = craft.teamManager.getFeaturedLayoutsByType('grid') %}
 
 <h3 style="color: #DA5A47;">USE WITH CAUTION!</h3>
 <form method="post" action="" accept-charset="UTF-8">
     <input type="hidden" name="action" value="teamManager/featuredLayout/saveLayouts" />
     <input type="hidden" name="values" value="{{ values }}" />
-    <input type="hidden" name="fLType" value="slideShow">
+    <input type="hidden" name="fLType" value="grid">
 
     {{ craft.teamManager.renderFormCustomMacro('editableTable', {
-        tableId: '1',
-        count: 4,
+        tableId: '2',
+        count: 8,
         values: values,
         name: 'table',
         static: true,

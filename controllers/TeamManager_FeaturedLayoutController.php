@@ -12,7 +12,7 @@ class TeamManager_FeaturedLayoutController extends BaseController
         $count = craft()->request->getPost('count'); //Number of models
         $type = craft()->request->getPost('fLType');
 
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i <= $count; $i++) {
             $id = craft()->request->getPost($i . '-id');
             if (craft()->request->getPost($i . '-isArticle')) {
                 craft()->teamManager->deleteFeaturedLayout($id);

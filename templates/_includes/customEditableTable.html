@@ -4,6 +4,9 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
+<input type="hidden" name="count" value="{{ count }}">
+<input type="hidden" name="tableId" value="{{ tableId }}">
+
 <table id="{{ id }}" class="shadow-box editable">
 	<thead>
 		<tr>
@@ -18,7 +21,7 @@
                 <input type="hidden" name="{{ rowId~'-id'}}" value="{{ values[rowId]['id'] }}">
                 <input type="hidden" name="{{ rowId~'-index'}}" value="{{ rowId }}">
 				{% for colId, col in cols %}
-					{% set cellName = rowId~'-'~colId %}
+					{% set cellName = tableId~'_'~rowId~'-'~colId %}
 					{% set value = (values[rowId][col.name] is defined ? values[rowId][col.name] : null) %}
 					{% set textual = (col.type in ['singleline','multiline','number']) %}
 					<td class="{% if textual %}textual{% endif %} {% if col.class is defined %}{{ col.class }}{% endif %}"{% if col.width is defined %} width="{{ col.width }}"{% endif %}>
@@ -33,7 +36,7 @@
                                             <div class="input">
                                                 {{ craft.teamManager.renderFormMacro('elementSelect', {
                                                     elements: craft.teamManager.getElementsById(value),
-                                                    id: rowId~'-'~col.name,
+                                                    id: tableId~'_'~rowId~'-'~col.name,
                                                     name: rowId~'-'~col.name,
                                                     elementType: craft.teamManager.getAssetElementType(),
                                                     criteria: {"kind":[],"localeEnabled":null,"locale":"en_us"},
@@ -47,7 +50,7 @@
                                     {% else %}
                                         {{ craft.teamManager.renderFormMacro(col.editType, {
                                             label:        col.heading|t,
-                                            id:           rowId~'-'~col.name,
+                                            id:           tableId~'_'~rowId~'-'~col.name,
                                             name:         rowId~'-'~col.name,
                                             value:        value
                                         }) }}
@@ -65,7 +68,7 @@
                                 {% for colId, col in cols %}
                                     {%- if col.type == 'button' -%}
                                         <script>
-                                            var id = "#" + {{ rowId }} + "-" + {{ colId }};
+                                            var id = "#" + "{{ tableId }}" + "_" + "{{ rowId }}" + "-" + "{{ colId }}";
                                             $(id).addClass('disabled');
                                         </script>
                                     {%- endif -%}
@@ -115,10 +118,11 @@
 
             //Toggling row on and off
             $('.fl-checkbox').click(function () {
-                var str = $(this).attr('name').replace('fl-checkbox-', '');
-                var row = str.substring(0, str.indexOf('-'));
-                for (var i = 0; i < {{ cols|length }}; i++) {
-                    var id = "#" + row + "-" + i;
+                var str = $(this).attr('id').replace('fl-checkbox-', '');
+                var tableId = str.substring(0, str.indexOf('_'));
+                var row = str.substring(str.indexOf('_') + 1, str.indexOf('-'));
+                for (var i = 0; i < "{{ cols|length }}"; i++) {
+                    var id = "#" + tableId + "_" + row + "-" + i;
                     if ($(this).is(':checked'))
                         $(id).addClass('disabled');
                     else
