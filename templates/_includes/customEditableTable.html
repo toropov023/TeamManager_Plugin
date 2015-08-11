@@ -75,7 +75,7 @@
                                 {% endfor %}
                             {% endif %}
                         {%- elseif col.type == 'index' -%}
-							<textarea style="padding: 7px 0; width: 10px" name="{{ cellName }}" rows="1"{% if static %} disabled{% endif %}>{{ rowId + 1 }}</textarea>
+							<textarea style="padding: 7px 0; width: 14px" name="{{ cellName }}" rows="1"{% if static %} disabled{% endif %}>{{ rowId + 1 }}</textarea>
                         {%- else -%}
 							<textarea style="padding: 7px 0; width: 10px" name="{{ cellName }}" rows="1"{% if static %} disabled{% endif %}>{{ value }}</textarea>
 						{%- endif -%}
