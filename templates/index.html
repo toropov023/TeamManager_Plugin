@@ -6,7 +6,8 @@
 
 {% set tabs = {
     all: { label: "All Teams"|t},
-    new:    { label: "New Team"|t, url: url('teammanager/teams/new') }
+    new:    { label: "New Team"|t, url: url('teammanager/teams/new') },
+    players: { label: "Registered Players"|t, url: url('teammanager/players/index')}
 } %}
 {% set selectedTab = 'all' %}
 

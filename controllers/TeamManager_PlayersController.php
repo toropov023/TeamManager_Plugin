@@ -68,4 +68,36 @@ class TeamManager_PlayersController extends BaseController
             $this->returnJson(array('success' => true));
         }
     }
+
+    public function actionUpdateSearchCriteria()
+    {
+        $this->requirePostRequest();
+
+        $results = craft()->teamManager->getAllPlayers();
+        $criteria = array();
+
+        //Strip by year of birth
+        $ageFrom = (int)craft()->request->getPost('ageFrom', 0);
+        $ageTo = (int)craft()->request->getPost('ageTo', 0);
+        if ($ageFrom > 0 || $ageTo > 0) {
+            $results = array_filter($results, function ($r) use ($ageFrom, $ageTo) {
+                $year = substr($r->birth, 6);
+                if($year > 15)
+                    $year = 19 . $year;
+                else
+                    $year = 20 . $year;
+                $age = (int)(date("Y") - $year);
+                return $age >= $ageFrom && $age <= $ageTo;
+            });
+
+            $criteria['ageFrom'] = $ageFrom;
+            $criteria['ageTo'] = $ageTo;
+        }
+
+        craft()->urlManager->setRouteVariables(array(
+            'results' => $results,
+            'criteria' => $criteria
+        ));
+        craft()->userSession->setNotice(Craft::t('Search results were successfully updated'));
+    }
 }

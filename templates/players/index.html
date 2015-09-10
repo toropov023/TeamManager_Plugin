@@ -1,0 +1,113 @@
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% includeCssResource "teammanager/css/players.css" %}
+
+{% set tabs = {
+    all: { label: "All Teams"|t},
+    new:    { label: "New Team"|t, url: url('teammanager/teams/new') },
+    players: { label: "Registered Players"|t, url: url('teammanager/players/index')}
+} %}
+
+{% set selectedTab = 'players' %}
+
+{% set content %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <div class="board">
+        <div class="players-sidebar" style="width: 200px">
+            <h2>Search criteria</h2>
+
+            <form method="post" action="" accept-charset="UTF-8">
+                <input type="hidden" name="action" value="teamManager/players/updateSearchCriteria" />
+
+                <label style="float: left; width: 100%;">Age</label>
+                <div style="width: 50px">
+                    {{ forms.textField({
+                        name: 'ageFrom',
+                        instructions: 'From'|t,
+                        value: criteria.ageFrom
+                    }) }}
+                </div>
+
+                <div style="width: 50px">
+                    {{ forms.textField({
+                        instructions: 'To'|t,
+                        name: 'ageTo',
+                        value: criteria.ageTo
+                    }) }}
+                </div>
+
+                <hr style="margin: 10px 0;">
+
+
+
+
+                <div class="buttons">
+                    <input type="submit" class="btn submit" value="{{ 'Update'|t }}">
+                </div>
+            </form>
+        </div>
+
+        <div class="players-sidebar" style="margin-left: 50px;">
+            <h2>Search results</h2>
+
+            {% if results|length <= 0 %}{% set results = craft.teamManager.getAllPlayers() %} {% endif %}
+
+            <table class="tg">
+                <tr>
+                    <th class="tg">Select</th>
+                    <th class="tg">Full Name</th>
+                    <th class="tg">Age</th>
+                    <th class="tg">Gender</th>
+                    <th class="tg">Email</th>
+                    <th class="tg">See more...</th>
+                </tr>
+
+                {% for result in results %}
+                    <tr>
+                        <td class="tg">*</td>
+                        <td class="tg">{{ result.name }}</td>
+                        <td class="tg">
+                            <script>
+                                var year = parseInt('{{ result.birth }}'.substring(6));
+                                document.write(2015 - ((year > 15 ? 1900 : 2000) + year));
+                            </script>
+                        </td>
+                        <td class="tg">~</td>
+                        <td class="tg">{{ result.email }}</td>
+                        <td class="tg"><a class="player-info" id="player-{{ result.id }}">Click here</a></td>
+                    </tr>
+
+                    <div class="popup" id="popup-{{ result.id }}" style="display: none">
+                        <div class="popup-inner">
+                            {% set attr = result.getAttributes() %}
+                            {% for key in attr|keys %}
+                                {% if not attr[key] is iterable %}
+                                    <p>{{ key ~ ": " ~ attr[key] }}</p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('.player-info').click(function () {
+                var id = $(this).attr('id').substring(7);
+
+                $('#popup-' + id).show();
+            });
+
+            $('.popup-inner').on('click', function (e) {
+                e.stopPropagation();
+            });
+            $('.popup').on('click', function () {
+                $(this).hide();
+            });
+        });
+    </script>
+{% endset %}

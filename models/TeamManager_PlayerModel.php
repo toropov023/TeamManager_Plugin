@@ -9,6 +9,7 @@ class TeamManager_PlayerModel extends BaseModel
     protected function defineAttributes()
     {
         return array(
+            'id' => AttributeType::Number,
             'name' => array(AttributeType::String, 'required' => true),
             'birth' => array(AttributeType::String, 'required' => true),
             'address' => array(AttributeType::String, 'required' => true),

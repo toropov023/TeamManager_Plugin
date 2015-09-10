@@ -107,20 +107,43 @@ class TeamManagerService extends BaseApplicationComponent
 
     public function getPlayerByName($name)
     {
-        $teamModel = null;
+        $model = null;
 
-        $teamRecord = TeamManager_PlayerRecord::model()->findByAttributes(array('name' => $name));
+        $record = TeamManager_PlayerRecord::model()->findByAttributes(array('name' => $name));
 
-        if ($teamRecord)
-            $teamModel = TeamManager_PlayerModel::populateModel($teamRecord);
+        if ($record)
+            $model = TeamManager_PlayerModel::populateModel($record);
 
-        return $teamModel;
+        $this->populatePlayer($model);
+        return $model;
+    }
+
+    public function getPlayerById($id)
+    {
+        $model = null;
+
+        $record = TeamManager_PlayerRecord::model()->findByAttributes(array('id' => $id));
+
+        if ($record)
+            $model = TeamManager_PlayerModel::populateModel($record);
+
+        $this->populatePlayer($model);
+        return $model;
     }
 
     public function getAllPlayers()
     {
         $records = TeamManager_PlayerRecord::model()->findAll(array('order' => 't.id'));
-        return TeamManager_PlayerModel::populateModels($records, 'id');
+        $models = TeamManager_PlayerModel::populateModels($records, 'id');
+        foreach ($models as $model)
+            $this->populatePlayer($model);
+        return $models;
+    }
+
+    private function populatePlayer($model)
+    {
+        foreach ($model->getAttribute('data') as $key => $value)
+            $model->$key = $value;
     }
 
     public function deletePlayer($id)

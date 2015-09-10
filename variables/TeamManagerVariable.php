@@ -96,4 +96,20 @@ class TeamManagerVariable
 
         return $arr;
     }
+
+    public function getAllPlayers()
+    {
+        return craft()->teamManager->getAllPlayers();
+    }
+    public function getPlayerById($id, $asArray = false)
+    {
+        $player = craft()->teamManager->getPlayerById($id);
+        if($player) {
+            if (!$asArray)
+                return $player;
+            else
+                return $player->getAttributes();
+        }
+        return null;
+    }
 }

@@ -10,7 +10,8 @@
     {% set title = "Create a new Team"|t %}
     {% set tabs = {
         all: { label: "All Teams"|t, url: url('teammanager')},
-        new: { label: "New Team"|t }
+        new: { label: "New Team"|t },
+        players: { label: "Registered Players"|t, url: url('teammanager/players/index')}
     } %}
     {% set selectedTab = 'new' %}
 
@@ -21,7 +22,8 @@
     {% set tabs = {
         all: { label: "All Teams"|t, url: url('teammanager')},
         new: { label: "New Team"|t, url: url('teammanager/teams/new') },
-        edit: { label: "Edit Team"}
+        edit: { label: "Edit Team"},
+        players: { label: "Registered Players"|t, url: url('teammanager/players/index')}
     } %}
     {% set selectedTab = 'edit' %}
 
