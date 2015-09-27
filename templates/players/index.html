@@ -40,9 +40,6 @@
 
                 <hr style="margin: 10px 0;">
 
-
-
-
                 <div class="buttons">
                     <input type="submit" class="btn submit" value="{{ 'Update'|t }}">
                 </div>
@@ -54,9 +51,26 @@
 
             {% if results|length <= 0 %}{% set results = craft.teamManager.getAllPlayers() %} {% endif %}
 
+            <form method="post" action="" accept-charset="UTF-8">
+                <input type="hidden" name="action" value="teamManager/players/exportPlayers"/>
+                <input type="hidden" name="data" id="data" value=""/>
+
+                <div class="popup" id="export-window" style="display: none">
+                    <div class="popup-inner">
+                        <p id="export-text"></p>
+                        <br>
+                        <input type="submit" class="btn submit" id="export-button" onclick="exportPlayers();" value="{{ 'Download'|t }}">
+                    </div>
+                </div>
+            </form>
+
+            <a class="btn submit" id="export-btn" onclick="openExportMenu()">Export</a>
+
             <table class="tg">
-                <tr>
-                    <th class="tg">Select</th>
+                <tr style="background-color: #D4E2EC;">
+                    <th class="tg">
+                        <input class="fl-checkbox" type="checkbox" id="select-all" onclick="selectAll();">
+                    </th>
                     <th class="tg">Full Name</th>
                     <th class="tg">Age</th>
                     <th class="tg">Gender</th>
@@ -66,7 +80,9 @@
 
                 {% for result in results %}
                     <tr>
-                        <td class="tg">*</td>
+                        <td class="tg">
+                            <input class="fl-checkbox" type="checkbox" name="select" id="select-{{ result.id }}">
+                        </td>
                         <td class="tg">{{ result.name }}</td>
                         <td class="tg">
                             <script>
@@ -109,5 +125,65 @@
                 $(this).hide();
             });
         });
+
+        function selectAll(){
+            var checked = document.getElementById('select-all').checked;
+
+            var x = document.getElementsByName("select");
+            var i;
+            for (i = 0; i < x.length; i++) {
+                if (x[i].type == "checkbox") {
+                    x[i].checked = checked;
+                }
+            }
+        }
+
+        function countSelected(){
+            var x = document.getElementsByName("select");
+            var i;
+            var count = 0;
+            for (i = 0; i < x.length; i++) {
+                if (x[i].type == "checkbox") {
+                    if(x[i].checked)
+                        count++;
+                }
+            }
+
+            return count;
+        }
+
+        function openExportMenu(){
+            $('#export-window').show();
+
+            var count = countSelected();
+            if(count > 0) {
+                $('#export-text').html("You have selected " + count + " players");
+                $('#export-button').show();
+            } else {
+                $('#export-text').html("You did not select any players." +
+                "</br>" +
+                "Check the box in the top-left corner of the table to select all" +
+                "</br>" +
+                "or select players individually");
+                $('#export-button').hide();
+            }
+        }
+
+        function exportPlayers(){
+            var x = document.getElementsByName("select");
+            var i;
+            var array = [];
+            for (i = 0; i < x.length; i++) {
+                if (x[i].type == "checkbox") {
+                    if(x[i].checked)
+                        array.push(x[i].id.substr(7));
+                }
+            }
+
+            $('#data').val(array);
+
+            $('#export-window').hide();
+        }
+
     </script>
 {% endset %}

@@ -100,4 +100,21 @@ class TeamManager_PlayersController extends BaseController
         ));
         craft()->userSession->setNotice(Craft::t('Search results were successfully updated'));
     }
+
+    public function actionExportPlayers(){
+        $this->requirePostRequest();
+
+        header( "Content-Type: application/vnd.ms-excel" );
+        header( "Content-disposition: attachment; filename=players.xls" );
+
+        echo 'First Name' . "\t" . "T-Shirt Size" . "\t" . "Shorts Size" . "\t" . 'email' . "\t" . 'Phone' . "\n";
+
+        $data = explode(",", craft()->request->getPost('data'));
+        foreach ($data as $id) {
+            $pl = craft()->teamManager->getPlayerById($id);
+            echo $pl->name . "\t" . $pl->shirtSize . "\t" . $pl->shortsSize . "\t" . $pl->email . "\t" . $pl->telephone . "\n";
+        }
+
+        craft()->end();
+    }
 }
