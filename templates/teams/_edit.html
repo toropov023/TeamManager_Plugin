@@ -64,6 +64,13 @@
         }) }}
     {% endif %}
 
+    {{ forms.textField({
+        label: 'Google Calendar ID'|t,
+        instructions: "Ex: 1pbq18bhjq33g6osuinga03leg"|t,
+        name: 'calendar',
+        value: team.calendar,
+    }) }}
+
     {{ forms.selectField({
         label: "Gender"|t,
         instructions: "Select the team's gender"|t,
